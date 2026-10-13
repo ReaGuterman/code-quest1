@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Code Quest – Otključavanje sustava</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #0b1020;
+      --panel: #151d33;
+      --accent: #5eead4;
+      --text: #f4f7fb;
+      --muted: #b8c4d9;
+      --danger: #fca5a5;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 24px;
+      font-family: system-ui, -apple-system, Segoe UI, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top, #1e3a5f 0, transparent 42%),
+        var(--bg);
+    }
+    main {
+      width: min(100%, 560px);
+      background: rgba(21, 29, 51, .96);
+      border: 1px solid #34435f;
+      border-radius: 24px;
+      padding: clamp(24px, 5vw, 42px);
+      text-align: center;
+      box-shadow: 0 24px 70px rgba(0,0,0,.35);
+    }
+    .icon { font-size: 3rem; margin-bottom: 10px; }
+    .eyebrow {
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: .16em;
+      font-size: .78rem;
+      font-weight: 800;
+    }
+    h1 { margin: 12px 0; font-size: clamp(1.8rem, 6vw, 2.5rem); }
+    p { color: var(--muted); line-height: 1.6; }
+    label {
+      display: block;
+      margin: 24px 0 8px;
+      text-align: left;
+      font-weight: 700;
+    }
+    input {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #536580;
+      border-radius: 12px;
+      background: #0b1020;
+      color: var(--text);
+      font-size: 1.5rem;
+      letter-spacing: .45em;
+      text-align: center;
+    }
+    input:focus { outline: 3px solid var(--accent); outline-offset: 2px; }
+    button {
+      width: 100%;
+      margin-top: 14px;
+      padding: 15px 20px;
+      border: 0;
+      border-radius: 12px;
+      background: var(--accent);
+      color: #062b2a;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    button:hover { filter: brightness(1.06); }
+    #feedback { min-height: 1.5em; margin-top: 14px; }
+    #success {
+      display: none;
+      margin-top: 26px;
+      padding: 24px 18px;
+      border: 1px solid var(--accent);
+      border-radius: 16px;
+      background: rgba(94,234,212,.09);
+    }
+    #success h2 { margin: 0 0 12px; color: var(--accent); }
+    #success p { margin-bottom: 0; color: var(--text); }
+    .hidden { display: none !important; }
+    footer { margin-top: 22px; font-size: .8rem; color: #8ea0bc; }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="icon" aria-hidden="true">🔐</div>
+    <div class="eyebrow">Code Quest · Završna misija</div>
+    <h1>Otključaj sustav</h1>
+    <p>Unesite posljednje četiri znamenke koje je vaš tim prikupio tijekom izazova.</p>
+
+    <form id="unlockForm">
+      <label for="code">Četveroznamenkasta šifra</label>
+      <input
+        id="code"
+        name="code"
+        type="text"
+        inputmode="numeric"
+        pattern="[0-9]{4}"
+        maxlength="4"
+        minlength="4"
+        placeholder="••••"
+        autocomplete="off"
+        aria-describedby="feedback"
+        required
+      >
+      <button type="submit">OTKLJUČAJ SUSTAV</button>
+    </form>
+
+    <p id="feedback" role="status" aria-live="polite"></p>
+
+    <section id="success" role="status" aria-live="polite">
+      <div class="icon" aria-hidden="true">🎉</div>
+      <h2>SUSTAV JE OTKLJUČAN!</h2>
+      <p>Čestitamo! Pokazali ste da logika, suradnja, kreativnost i programiranje mogu riješiti i najteže digitalne izazove.</p>
+    </section>
+
+    <footer>CODE QUEST · Digitalni umovi na zadatku</footer>
+  </main>
+
+  <script>
+    const correctCode = "4279";
+    const form = document.getElementById("unlockForm");
+    const input = document.getElementById("code");
+    const feedback = document.getElementById("feedback");
+    const success = document.getElementById("success");
+
+    input.addEventListener("input", () => {
+      input.value = input.value.replace(/\D/g, "").slice(0, 4);
+      feedback.textContent = "";
+    });
+
+    form.addEventListener("submit", (event) => {
+      event.preventDefault();
+
+      if (input.value === correctCode) {
+        success.style.display = "block";
+        feedback.textContent = "";
+        form.classList.add("hidden");
+        input.blur();
+        success.scrollIntoView({ behavior: "smooth", block: "center" });
+      } else {
+        success.style.display = "none";
+        feedback.textContent = "Šifra nije točna. Provjerite znamenke i pokušajte ponovno!";
+        feedback.style.color = "#fca5a5";
+        input.select();
+      }
+    });
+  </script>
+</body>
+</html>
